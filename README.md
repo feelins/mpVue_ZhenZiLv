@@ -1,4 +1,6 @@
-# firstmpvue
+# mpVue_ZhenZiLv
+
+这是一个学习mpvue的项目，学习记录
 
 >  
 
