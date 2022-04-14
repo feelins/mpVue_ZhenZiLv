@@ -1,3 +1,8 @@
 const host = 'http://localhost:5757'
 
-export default host
+const config = {
+  host,
+  loginUrl: `${host}/weapp/login`
+}
+
+export default config
