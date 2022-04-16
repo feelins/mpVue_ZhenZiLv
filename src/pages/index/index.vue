@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button open-type="getUserInfo" lang="zh_CN" class="btn" @getuserinfo="login">授权登录</button>
+    <LoginWindow></LoginWindow>
     <div class="show">
       <div class="mark-text">当前分数</div>
       <div class="mark">{{mark}}</div>
@@ -17,9 +17,11 @@
 </template>
 
 <script>
-import config from '@/config'
-import qcloud from 'wafer2-client-sdk'
+import LoginWindow from '@/components/LoginWindow'
 export default {
+  components: {
+    LoginWindow
+  },
   data() {
     return {
       mark: 0
@@ -28,20 +30,6 @@ export default {
   methods: {
     addMark(add) {
       this.mark = this.mark + add
-    },
-    login() {
-      qcloud.setLoginUrl(config.loginUrl)
-      qcloud.login({
-        success: userInfo => {
-          console.log('登录成功', userInfo)
-        },
-        fail: err => {
-          console.log('登录失败', err)
-        }
-      })
-    },
-    loginSuccess(userInfo) {
-      wx.setStorageSync('userinfo', userInfo)
     }
   }
 }
@@ -86,6 +74,4 @@ export default {
   background: #feb600;
   margin-right: 80px;
 }
-
-
 </style>
