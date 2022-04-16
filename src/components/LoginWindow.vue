@@ -22,6 +22,7 @@
 <script>
 import config from '@/config'
 import qcloud from 'wafer2-client-sdk'
+import showSuccess from '@/utils/utils'
 export default {
   methods: {
     login() {
@@ -32,6 +33,7 @@ export default {
           this.loginSuccess(userInfo)
           this.$emit('changeShow', false, userInfo)
           wx.showTabBar()
+          showSuccess('登录成功-shaopf')
         },
         fail: err => {
           console.log('登录失败', err)
