@@ -29,6 +29,9 @@ export default {
       qcloud.login({
         success: userInfo => {
           console.log('登录成功', userInfo)
+          this.loginSuccess(userInfo)
+          this.$emit('changeShow', false, userInfo)
+          wx.showTabBar()
         },
         fail: err => {
           console.log('登录失败', err)

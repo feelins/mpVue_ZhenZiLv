@@ -21,8 +21,8 @@
       {
         "text": "我的",
         "pagePath": "pages/me/main",
-        "iconPath": "static/images/wenzi.png",
-        "selectedIconPath": "static/images/yonghu.png"
+        "iconPath": "static/images/huasheng.png",
+        "selectedIconPath": "static/images/huasheng-active.png"
       }
     ]
   }
