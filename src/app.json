@@ -1,7 +1,9 @@
 {
   "pages": [
     "pages/me/main",
-    "pages/index/main"
+    "pages/index/main",
+    "pages/opinion/main",
+    "pages/instruction/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

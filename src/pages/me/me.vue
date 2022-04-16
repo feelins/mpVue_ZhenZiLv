@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="contain">
-            <div class="row">
+            <div class="row" @click="showInstruction">
                 <label class="left">
                     <img class="img" src="../../../static/images/homework.png">
                 </label>
@@ -37,7 +37,7 @@
                     >
                 </label>
             </div>
-            <div class="row">
+            <div class="row" @click="showOpinion">
                 <label class="left">
                     <img class="img" src="../../../static/images/approval.png">
                 </label>
@@ -82,6 +82,16 @@
         quotes[0] = '立志言为本，修身行乃先'
         // 根据随机数rand1，在数组中找出随机语句，并赋值到quote上面
         this.quote = quotes[rand1]
+      },
+      showOpinion () {
+        wx.navigateTo({
+          url: '/pages/opinion/main'
+        })
+      },
+      showInstruction () {
+        wx.navigateTo({
+          url: '/pages/instruction/main'
+        })
       }
     },
     onShow () {
