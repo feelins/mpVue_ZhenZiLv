@@ -35,6 +35,7 @@
 </template>
 
 <script>
+  import {post, showModel} from '@/utils/utils'
   export default {
     data () {
       return {
@@ -72,17 +73,29 @@
         })
       },
       async submit () {
-        const data = {
-          opinion: this.opinion
-        }
-        wx.request({
-          url: 'http://localhost:5757/weapp/createopinion',
-          method: 'POST',
-          data: data,
-          success: function (res) {
-            console.log('请示成功，在前端打印的信息', res)
+        console.log('word-count: ', this.word_count)
+        if (this.word_count > 0) {
+          // console.log('可以执行')
+          // 这里指需要传递的数据字段
+          const data = {
+            opinion: this.opinion,
+            src: this.src.join(','),
+            wechat: this.wechat,
+            openid: wx.getStorageSync('userinfo').openId
           }
-        })
+          try {
+            // await 是指要等到后端执行完成，并获取到返回数据之后，再往下执行。
+            const res = await post('/weapp/createopinion', data)
+            console.log('从后端返回执行正确的信息是：', res)
+            showModel('提交成功', '已经将您的反馈提交给了开发者~')
+          } catch (e) {
+            console.log('从后端返回执行正确的信息是：', e)
+            showModel('提交失败', '服务器出了一点问题， 请稍后再试~')
+          }
+        } else {
+          // console.log('不可以执行')
+          showModel('提交失败', '意见反馈不能为空~')
+        }
       }
     }
   }
