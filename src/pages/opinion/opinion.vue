@@ -30,7 +30,7 @@
             <input v-model="wechat" maxlength="20" placeholder="如果想详细交流，请留下微信号哦" class="wechat-input">
           </div>
         </div>
-        <button>提交</button>
+        <button @click="submit">提交</button>
     </div>
 </template>
 
@@ -68,6 +68,19 @@
             // 正确的方法应该是先将this，在上文保存一下。
             that.src.push(tempFilePaths)
             console.log('path: ', that.src)
+          }
+        })
+      },
+      async submit () {
+        const data = {
+          opinion: this.opinion
+        }
+        wx.request({
+          url: 'http://localhost:5757/weapp/createopinion',
+          method: 'POST',
+          data: data,
+          success: function (res) {
+            console.log('请示成功，在前端打印的信息', res)
           }
         })
       }
