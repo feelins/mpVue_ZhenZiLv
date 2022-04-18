@@ -82,6 +82,17 @@ export default {
   },
   onShow() {
     this.getMark()
+  },
+  onPullDownRefresh() {
+    console.log('我正在下拉刷新')
+    this.getMark()
+    wx.stopPullDownRefresh()
+  },
+  onShareAppMessage() {
+    return {
+      title: '贞子',
+      path: '/pages/index/main'
+    }
   }
 }
 </script>
