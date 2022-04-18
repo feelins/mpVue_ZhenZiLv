@@ -21,7 +21,7 @@
 
 <script>
 import LoginWindow from '@/components/LoginWindow'
-import {showModel, post} from '@/utils/utils'
+import {showModel, post, get} from '@/utils/utils'
 export default {
   components: {
     LoginWindow
@@ -53,6 +53,21 @@ export default {
     getModel(val) {
       this.showLogin = val[0]
       this.userinfo = val[1]
+      console.log('this.whowLogin', this.showLogin)
+      // 在这里加的意思是，每一次登录成功，也会调用查询分数
+      this.getMark()
+    },
+    async getMark() {
+      try {
+        // 请求后端，找到server/controllers/getmark.js文件
+        const res = await get('/weapp/getmark', {openid: this.userinfo.openId})
+        console.log('从后端返回的执行正确的信息是：', res)
+        this.mark = res.mark
+        console.log('this.mark', this.mark)
+      } catch (e) {
+        showModel('请求失败', '请下拉页面重试哦')
+        console.log('从后端返回的信息是: ', e)
+      }
     }
   },
   mounted() {
@@ -64,6 +79,9 @@ export default {
       wx.hideTabBar()
       this.showLogin = true
     }
+  },
+  onShow() {
+    this.getMark()
   }
 }
 </script>
