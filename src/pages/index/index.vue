@@ -21,6 +21,7 @@
 
 <script>
 import LoginWindow from '@/components/LoginWindow'
+import {showModel, post} from '@/utils/utils'
 export default {
   components: {
     LoginWindow
@@ -33,8 +34,21 @@ export default {
     }
   },
   methods: {
-    addMark(add) {
-      this.mark = this.mark + add
+    async addMark(add) {
+      try {
+        const data = {
+          openid: this.userinfo.openId,
+          add: add
+        }
+        // 请求后端，找到server/controllers/createrecord.js文件
+        const res = await post('/weapp/createrecord', data)
+        console.log('从后端返回的执行正确的信息是：', res)
+        this.mark = this.mark + add
+        console.log('this.mark', this.mark)
+      } catch (e) {
+        showModel('请求失败', '请重试哦')
+        console.log('从后端返回的信息是: ', e)
+      }
     },
     getModel(val) {
       this.showLogin = val[0]

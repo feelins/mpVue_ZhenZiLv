@@ -33,5 +33,7 @@ router.get('/message', controllers.message.get)
 router.post('/message', controllers.message.post)
 // POST 用来处理微信转发过来的意见反馈
 router.post('/createopinion', controllers.createopinion)
+// POST 用来处理微信转发过来的增删记录
+router.post('/createrecord', controllers.createrecord)
 
 module.exports = router
