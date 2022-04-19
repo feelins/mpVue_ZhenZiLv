@@ -6,7 +6,7 @@
     
     <div class="show">
       <div class="button">
-        <div class="btn1 right">撤销</div>
+        <div class="btn1 right" @click='undoResetMark()'>撤销</div>
         <div class="btn0 left" @click='reset()'>清零</div>
       </div>
       <div class="mark-text">当前分数</div>
@@ -25,7 +25,7 @@
 
 <script>
 import LoginWindow from '@/components/LoginWindow'
-import {showModel, post, get} from '@/utils/utils'
+import {showSuccess, showModel, post, get} from '@/utils/utils'
 export default {
   components: {
     LoginWindow
@@ -83,6 +83,17 @@ export default {
           showModel('请求失败', '请重试哦')
           console.log('从后端返回的错误信息是: ', e)
         }
+      }
+    },
+    async undoResetMark() {
+      try {
+        const res = await post('/weapp/undoreset', {openid: this.userinfo.openId})
+        console.log('从后端返回的执行正确的信息是：', res)
+        this.mark = res.mark
+        showSuccess('撤销成功！')
+      } catch (e) {
+        showModel('撤销失败', '请重试哦')
+        console.log('从后端返回的错误信息是: ', e)
       }
     },
     reset() {

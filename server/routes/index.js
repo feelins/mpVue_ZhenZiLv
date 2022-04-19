@@ -39,5 +39,7 @@ router.post('/createrecord', controllers.createrecord)
 router.get('/getmark', controllers.getmark)
 // POST 用来处理清零数据库
 router.post('/resetmark', controllers.resetmark)
+// POST 用来处理清零数据库
+router.post('/undoreset', controllers.undoreset)
 
 module.exports = router

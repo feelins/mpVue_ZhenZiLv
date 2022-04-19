@@ -1,5 +1,5 @@
 import config from '../config'
-export default function showSuccess(text) {
+export function showSuccess(text) {
   wx.showToast({
     title: text,
     icon: 'success',

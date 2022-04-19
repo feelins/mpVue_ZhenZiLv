@@ -22,7 +22,7 @@
 <script>
 import config from '@/config'
 import qcloud from 'wafer2-client-sdk'
-import showSuccess from '@/utils/utils'
+import {showSuccess} from '@/utils/utils'
 export default {
   methods: {
     login() {
