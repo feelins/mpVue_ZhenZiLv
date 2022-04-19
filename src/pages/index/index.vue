@@ -5,6 +5,10 @@
     </div>
     
     <div class="show">
+      <div class="button">
+        <div class="btn1 right">撤销</div>
+        <div class="btn0 left" @click='reset()'>清零</div>
+      </div>
       <div class="mark-text">当前分数</div>
       <div class="mark">{{mark}}</div>
     </div>
@@ -68,6 +72,31 @@ export default {
         showModel('请求失败', '请下拉页面重试哦')
         console.log('从后端返回的信息是: ', e)
       }
+    },
+    async resetMark() {
+      if (this.mark !== 0) {
+        try {
+          const res = await post('/weapp/resetmark', {openid: this.userinfo.openId})
+          console.log('从后端返回的执行正确的信息是：', res)
+          this.mark = 0
+        } catch (e) {
+          showModel('请求失败', '请重试哦')
+          console.log('从后端返回的错误信息是: ', e)
+        }
+      }
+    },
+    reset() {
+      var that = this
+      wx.showModal({
+        content: '确定要清零吗？',
+        success: function(res) {
+          console.log('执行清堆后是000：', res)
+          if (res.confirm) {
+            console.log('执行清堆后是：', res)
+            that.resetMark()
+          }
+        }
+      })
     }
   },
   mounted() {
@@ -112,6 +141,25 @@ export default {
   .mark{
     font-size: 88px;
     color: yellow;
+  }
+  .button{
+    margin:0 10px;
+    height: 30px;
+    line-height:30px;
+    text-align:center;
+    font-size: 15px;
+    font-weight:bold;
+    background:#EA5149;
+    .btn0{
+      width: 60px;
+      border-radius: 15px;
+      border:1px dashed #feb600;
+    }
+    .btn1{
+      width: 60px;
+      border-radius: 15px;
+      border:1px dashed #feb600;
+    }
   }
 }
 .row{
