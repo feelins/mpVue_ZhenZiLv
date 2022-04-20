@@ -4,7 +4,7 @@
 		<div class="table" width="98%">
 			<div class="tr">
 				<div class="date">
-					{{record.create_time}}
+					{{create_time}}
 				</div>
 				<div class="busi">
 					<label v-if="record.add>0">+{{record.add}}</label>
@@ -54,8 +54,14 @@
 </template>
 
 <script>
+import {formatTime} from '@/utils/index'
 export default {
-  props: ['record']
+  props: ['record'],
+  data () {
+    return {
+      create_time: formatTime(new Date(this.record.create_time))
+    }
+  }
 }
 </script>
 
@@ -74,7 +80,8 @@ export default {
     }
     .date{
       width: 40%;
-      margin-left: 10px;
+      padding-left: 5px;
+    //   margin-left: 10px;
     }
     .busi{
       width: 10%;

@@ -86,6 +86,9 @@ export default {
       font-size: 15px;
   }
 }
+.table{
+  width: 100%;
+}
 .th {
   width: 100%;
   height: 30px;
@@ -109,7 +112,7 @@ export default {
 }
 .busi{
   width: 10%;
-  margin-left: 5px;
+  margin-left: 10px;
 }
 .mark{
     width: 20%;
