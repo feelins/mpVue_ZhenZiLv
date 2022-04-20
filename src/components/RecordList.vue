@@ -18,8 +18,8 @@
           <label v-else>{{record.mark}}</label>
         </div>
         <!-- 备注 -->
-        <!-- showChangeNote方法用来控制editNote变量为false或者为true -->
-        <div class="net" @click='showChangeNote'>
+        <!-- showUpdateNote方法用来控制editNote变量为false或者为true -->
+        <div class="net" @click='showUpdateNote'>
           <label v-if="note">{{note}}</label>
           <label v-else class="no-note">点击添加</label>
         </div>
@@ -31,13 +31,13 @@
         </label>
         <label v-else>
           <!-- note指的记录备注，默认是record.note。如果重新编辑需要根据编辑的文本实时显示，所以将note做成了变量，src变量用到了三元函数。当文本框中有文字，显示编辑按钮；当文本框中没有文字，不显示按钮 -->
-          <div class="image" @click='showChangeNote'><image class='img' :src="note? src : ''"></image></div>
+          <div class="image" @click='showUpdateNote'><image class='img' :src="note? src : ''"></image></div>
         </label>
       </div>
     </div>
     <!-- 点击添加或者编辑按钮显示的文本框 -->
     <div class="hide" v-if="editNote">
-      <button class="btn">
+      <button class="btn" @click="addNote">
         <!-- 当record记录有备注字段不为空，按钮显示为「修改」；当备注字段为空，按钮显示为「添加」 -->
         <label v-if="record.note">修改</label>
         <label v-else>添加</label>
@@ -53,26 +53,44 @@
 
 <script>
 import {formatTime} from '@/utils/index'
+import {post, showModel} from '@/utils/utils'
 export default {
   props: ['record'],
   data () {
     return {
-      // ellipsis用来控制添加或者编辑文本框显示、note是添加或者编辑文本框中的文本（note默认为记录数据里面的备注）、src是编辑按钮图片链接
+      // editNote用来控制添加或者编辑文本框显示、note是添加或者编辑文本框中的文本（note默认为记录数据里面的备注）、src是编辑按钮图片链接
       createTime: formatTime(new Date(this.record.create_time)),
       editNote: false,
       note: this.record.note,
-      src: '/static/images/bianji.png'
+      src: '../../static/images/bianji.png'
     }
   },
   methods: {
     // editNote为true时，显示文本框；为false隐藏文本框
-    showChangeNote () {
+    showUpdateNote () {
       this.editNote = !this.editNote
     },
     // 点击取消按钮时，要改变editNote，同时将note重置为修改前的状态
     cancel () {
       this.editNote = !this.editNote
       this.note = this.record.note
+    },
+    async addNote () {
+      const data = {
+        id: this.record.id,
+        note: this.note
+      }
+      try {
+        const res = await post('/weapp/updateNote', data)
+        console.log('从后端返回的执行正确的信息是：', res)
+        // 点击添加或者修改按钮，隐藏掉文本框
+        this.editNote = false
+        // 将从父组件传过来的record中的note值更新为修改后的值
+        this.record.note = this.note
+      } catch (e) {
+        showModel('失败', '请重新提交哦~')
+        console.log('从后端返回的执行错误的信息是：', e)
+      }
     }
   }
 }

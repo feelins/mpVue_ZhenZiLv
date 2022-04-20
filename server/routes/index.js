@@ -43,5 +43,7 @@ router.post('/resetmark', controllers.resetmark)
 router.post('/undoreset', controllers.undoreset)
 // GET 用来处理微信转发过来的记录
 router.get('/showRecords', controllers.showRecords)
+// POST 用来处理修改备注
+router.post('/updateNote', controllers.updateNote)
 
 module.exports = router
