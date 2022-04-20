@@ -12,13 +12,19 @@
         <div class="mark">最后得分</div>
         <div class="net">备注</div>
       </div>
+      <!-- :record是将每个循环的记录数据传到RecordList组件中 -->
+      <RecordList :key='index' v-for='(record,index) in records' :record='record'></RecordList>
     </div>
   </div>
 </template>
 
 <script>
+import RecordList from '@/components/RecordList'
 import {get} from '@/utils/utils'
 export default {
+  components: {
+    RecordList
+  },
   data () {
     return {
       show_record: false,
