@@ -1,56 +1,54 @@
 <template>
-<div>
-	<div class="book-card">
-		<div class="table" width="98%">
-			<div class="tr">
-				<div class="date">
-					{{create_time}}
-				</div>
-				<div class="busi">
-					<label v-if="record.add>0">+{{record.add}}</label>
-					<label v-if="record.add==0">&nbsp;0</label>
-					<label v-if="record.add<0">{{record.add}}</label>
-				</div>
-				<div class="mark">
-					<label v-if="record.mark >= 0">&nbsp;{{record.mark}}</label>
-					<label v-else>{{record.mark}}</label>
-					
-				</div>
-				<div class="net" @click="changeShow">
-					<label v-if="note">{{record.note}}</label>
-					<label v-else class="no-note">点击添加</label>
-				</div>
-				<label v-if="show_input">
-					<div class="image" @click="cancel">
-						<image class="img" src="../../static/images/quxiao.png"></image>
-					</div>
-				</label>
-				<label v-else>
-					<div class="image" @click="changeShow">
-						<image class="img" :src="note?src:''"></image>
-					</div>
-				</label>
-				
-			</div>
-		</div>
-		<div class="hide" v-if="show_input">
-			<button class="btn" @click="updateNote">
-				<label v-if="record.note">
-					修改
-				</label>
-				<label v-else>
-					添加
-				</label>
-			</button>
-			<input v-model="note"
-						 class="input" 
-						 maxlength="10" 
-						 placeholder="最多输入10个字" 
-						 >
-		</div>
-		
-	</div>
-</div>
+  <div class="book-card">
+    <div class="table" width="98%">
+      <div class="tr">
+        <!-- 时间 -->
+        <div class="date">{{createTime}}</div>
+        <!-- 分数 -->
+        <div class="busi">
+          <!-- 为了页面样式比较整齐，如果当前分数>0，在前面加一个+号; 当前分数=0在前面加一个空格-->
+          <label v-if="record.add > 0">+{{record.add}}</label>
+          <label v-else-if="record.add == 0">&nbsp;0</label>
+          <label v-else>{{record.add}}</label>
+        </div>
+        <!-- 最后得分 -->
+        <div class="mark">
+          <!-- 如果当前分数大于0，在分数的前面加一个空格，为了页面样式比较整齐 -->
+          <label v-if="record.mark >= 0">&nbsp;{{record.mark}}</label>
+          <label v-else>{{record.mark}}</label>
+        </div>
+        <!-- 备注 -->
+        <!-- showChangeNote方法用来控制editNote变量为false或者为true -->
+        <div class="net" @click='showChangeNote'>
+          <label v-if="note">{{note}}</label>
+          <label v-else class="no-note">点击添加</label>
+        </div>
+        <!-- 编辑或者取消按钮 -->
+        <!-- 当点击添加或者编辑按钮，显示文本框，按钮变成取消按钮 -->
+        <!-- 点击取消按钮，触发cancel方法，隐藏文本框，按钮重新变成添加或者编辑按钮 -->
+        <label v-if="editNote">
+          <div class="image" @click='cancel'><image class='img' src='../../static/images/quxiao.png'></image></div>
+        </label>
+        <label v-else>
+          <!-- note指的记录备注，默认是record.note。如果重新编辑需要根据编辑的文本实时显示，所以将note做成了变量，src变量用到了三元函数。当文本框中有文字，显示编辑按钮；当文本框中没有文字，不显示按钮 -->
+          <div class="image" @click='showChangeNote'><image class='img' :src="note? src : ''"></image></div>
+        </label>
+      </div>
+    </div>
+    <!-- 点击添加或者编辑按钮显示的文本框 -->
+    <div class="hide" v-if="editNote">
+      <button class="btn">
+        <!-- 当record记录有备注字段不为空，按钮显示为「修改」；当备注字段为空，按钮显示为「添加」 -->
+        <label v-if="record.note">修改</label>
+        <label v-else>添加</label>
+      </button>
+      <!-- input文本框绑定了note变量，在编辑文本框时，显示的备注文字，会根据文本框中编辑的文字变化 -->
+      <input v-model='note'
+            class="input"
+            maxlength='10'
+            placeholder="最多输入10个字">
+    </div>
+  </div>
 </template>
 
 <script>
@@ -59,7 +57,22 @@ export default {
   props: ['record'],
   data () {
     return {
-      create_time: formatTime(new Date(this.record.create_time))
+      // ellipsis用来控制添加或者编辑文本框显示、note是添加或者编辑文本框中的文本（note默认为记录数据里面的备注）、src是编辑按钮图片链接
+      createTime: formatTime(new Date(this.record.create_time)),
+      editNote: false,
+      note: this.record.note,
+      src: '/static/images/bianji.png'
+    }
+  },
+  methods: {
+    // editNote为true时，显示文本框；为false隐藏文本框
+    showChangeNote () {
+      this.editNote = !this.editNote
+    },
+    // 点击取消按钮时，要改变editNote，同时将note重置为修改前的状态
+    cancel () {
+      this.editNote = !this.editNote
+      this.note = this.record.note
     }
   }
 }
