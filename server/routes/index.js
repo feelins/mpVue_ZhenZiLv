@@ -41,5 +41,7 @@ router.get('/getmark', controllers.getmark)
 router.post('/resetmark', controllers.resetmark)
 // POST 用来处理清零数据库
 router.post('/undoreset', controllers.undoreset)
+// GET 用来处理微信转发过来的记录
+router.get('/showRecords', controllers.showRecords)
 
 module.exports = router
