@@ -10,7 +10,7 @@ module.exports = async(ctx) => {
                                 .where('openid', openid)
                                 .select('id', 'add', 'mark', 'note', 'create_time')
                                 .orderBy('id', 'desc')
-                                .limit(15).offset(Number(page * 15))
+                                .limit(15).offset(Number(page) * 15)
 
         // limit n offset m是mysql的分页语句  代码从m行开始查，查找n条数据
         // 执行成功返回的数据

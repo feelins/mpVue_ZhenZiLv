@@ -58,24 +58,24 @@ export default {
         icon: 'loading'
       })
 
-      if (this.path === 0) {
+      if (this.page === 0) {
         this.records = []
       }
       // 需要传到后台的数据
       const data = {
         openid: this.userinfo.openId,
-        path: this.page
+        page: this.page
       }
       // 将后台传过来的数据保存到records变量中
       const resultRecords = await get('/weapp/showRecords', data)
       // this.records = resultRecords.records
       this.records = this.records.concat(resultRecords.records)
-      if (resultRecords.records.lenth < 15 && this.page > 0) {
+      if (resultRecords.records.length < 15 && this.page > 0) {
         this.more = false
       }
       console.log('从后台返回的记录数据', this.records)
       // 通过records数组长度来判断show_record变量为false或者true
-      if (this.records.lenth === 0) {
+      if (this.records.length === 0) {
         this.show_record = true
       } else {
         this.show_record = false
