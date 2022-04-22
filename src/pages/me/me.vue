@@ -28,7 +28,7 @@
                     >
                 </label>
             </div>
-            <div class="row">
+            <div class="row" @click='deleteConfirm'>
                 <label class="left">
                     <img class="img" src="../../../static/images/delete.png">
                 </label>
@@ -52,66 +52,97 @@
 
 
 <script>
-  export default {
-    data () {
-      return {
-        // 用户信息
-        userinfo: {},
-        quote: ''
-      }
-    },
-    methods: {
-      // 生成随机语句
-      rankArray () {
-        // Math.random()会生成0-1之间的小数，比如0.48204242025855937
-        var a = Math.random() + ''
-        // a.charAt(5)取a这个字符串的第6位数，能保证rand1为0-9之间的随机数
-        var rand1 = a.charAt(5)
-        // 创建一个数组对象
-        var quotes = []
-        // 将10个励志语句放到数组中
-        quotes[1] = '不奋发，则心日颓靡；不检束，则心日恣肆'
-        quotes[2] = '自制是一种秩序，一种对于快乐与欲望的控制'
-        quotes[3] = '哪怕一点小小的克制，也会使人变得强而有力'
-        quotes[4] = '做一个自律的人，像优秀的人学习，然后做好自己'
-        quotes[5] = '真正的自由是在所有时候都能控制自己'
-        quotes[6] = '每天爱自己多一点！！！'
-        quotes[7] = '如果连自己都不能控制，有什么资格去谈自己想要的'
-        quotes[8] = '登峰造极的成就源于自律'
-        quotes[9] = '自我控制是最强者的本能'
-        quotes[0] = '立志言为本，修身行乃先'
-        // 根据随机数rand1，在数组中找出随机语句，并赋值到quote上面
-        this.quote = quotes[rand1]
-      },
-      showOpinion () {
-        wx.navigateTo({
-          url: '/pages/opinion/main'
-        })
-      },
-      showInstruction () {
-        wx.navigateTo({
-          url: '/pages/instruction/main'
-        })
-      }
-    },
-    onShow () {
-      this.rankArray()
-    },
-    mounted () {
-      const userinfo = wx.getStorageSync('userinfo')
-      if (userinfo.openId) {
-        this.userinfo = userinfo
-        console.log('this.userinfo: ', this.userinfo)
-      }
+import {post, showModel, showSuccess} from '@/utils/utils'
+export default {
+  data () {
+    return {
+      // 用户信息
+      userinfo: {},
+      quote: ''
     }
-
-    // onShow () {
-    //   const userinfo = wx.getStorageSync('userinfo')
-    //   if (userinfo.openId) {
-    //     this.userinfo = userinfo
-    //   }
-    // }
+  },
+  methods: {
+    // 生成随机语句
+    rankArray () {
+      // Math.random()会生成0-1之间的小数，比如0.48204242025855937
+      var a = Math.random() + ''
+      // a.charAt(5)取a这个字符串的第6位数，能保证rand1为0-9之间的随机数
+      var rand1 = a.charAt(5)
+      // 创建一个数组对象
+      var quotes = []
+      // 将10个励志语句放到数组中
+      quotes[1] = '不奋发，则心日颓靡；不检束，则心日恣肆'
+      quotes[2] = '自制是一种秩序，一种对于快乐与欲望的控制'
+      quotes[3] = '哪怕一点小小的克制，也会使人变得强而有力'
+      quotes[4] = '做一个自律的人，像优秀的人学习，然后做好自己'
+      quotes[5] = '真正的自由是在所有时候都能控制自己'
+      quotes[6] = '每天爱自己多一点！！！'
+      quotes[7] = '如果连自己都不能控制，有什么资格去谈自己想要的'
+      quotes[8] = '登峰造极的成就源于自律'
+      quotes[9] = '自我控制是最强者的本能'
+      quotes[0] = '立志言为本，修身行乃先'
+      // 根据随机数rand1，在数组中找出随机语句，并赋值到quote上面
+      this.quote = quotes[rand1]
+    },
+    showOpinion () {
+      wx.navigateTo({
+        url: '/pages/opinion/main'
+      })
+    },
+    showInstruction () {
+      wx.navigateTo({
+        url: '/pages/instruction/main'
+      })
+    },
+    async deleteRecords () {
+      try {
+        const res = await post('/weapp/clearRecords', {openid: this.userinfo.openId})
+        console.log('从后端返回的执行正确的信息是：', res)
+        showSuccess('记录已清空~')
+      } catch (e) {
+        showModel('清空失败', '请重试哦~')
+        console.log('从后端返回的执行错误的信息是：', e)
+      }
+    },
+    deleteConfirm () {
+      var that = this
+      // 用户点击确认后，调用上面添加的deleteRecords方法
+      wx.showModal({
+        content: `清空之后不能恢复哦~确定要清空吗？`,
+        success: function (res) {
+          if (res.confirm) {
+            that.deleteRecords()
+          }
+        }
+      })
+    }
+  },
+  onShow () {
+    this.rankArray()
+  },
+  mounted () {
+    const userinfo = wx.getStorageSync('userinfo')
+    if (userinfo.openId) {
+      this.userinfo = userinfo
+      console.log('this.userinfo: ', this.userinfo)
+    }
+  },
+  onShareAppMessage (e) {
+    // 这个分享功能，在record.vue里加了一次，貌似在所有的页面都起作用了？？？
+    return {
+      title: '真自律',
+      path: '/pages/index/main',
+      imageUrl: ''
+    }
   }
+
+  // onShow () {
+  //   const userinfo = wx.getStorageSync('userinfo')
+  //   if (userinfo.openId) {
+  //     this.userinfo = userinfo
+  //   }
+  // }
+}
 </script>
 
 

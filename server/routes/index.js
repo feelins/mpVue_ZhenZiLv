@@ -45,5 +45,7 @@ router.post('/undoreset', controllers.undoreset)
 router.get('/showRecords', controllers.showRecords)
 // POST 用来处理修改备注
 router.post('/updateNote', controllers.updateNote)
+// POST 清空记录
+router.post('/clearRecords', controllers.clearRecords)
 
 module.exports = router
