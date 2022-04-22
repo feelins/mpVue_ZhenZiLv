@@ -14,6 +14,16 @@
       </div>
       <!-- :record是将每个循环的记录数据传到RecordList组件中 -->
       <RecordList :key='index' v-for='(record,index) in records' :record='record'></RecordList>
+      <p class="text-footer" v-if="!more">
+        没有更多数据
+      </p>
+      <!-- 如果records数据一共不到15条，底部什么也不用显示 -->
+      <p class="text-footer" v-else-if="records.length < 15">
+      </p>
+      <!-- 如果more为true，并且总记录大于15条，底部显示加载中 -->
+      <p class="text-footer" v-else>
+        加载中···
+      </p>
     </div>
   </div>
 </template>
@@ -27,25 +37,42 @@ export default {
   },
   data () {
     return {
+      // page默认为0，表示当前的页数；more默认为true，用来控制底部显示的信息
       show_record: false,
       userinfo: {},
-      records: []
+      records: [],
+      page: 0,
+      more: true
     }
   },
   methods: {
-    async getRecords () {
+    async getRecords (init) {
+      // 每次切换页面的时候，用户应该最想看到最新的数据，所以要将page变量设为0
+      if (init) {
+        this.page = 0
+        this.more = true
+      }
       // 调用后台数据时显示[加载中]提示框
       wx.showToast({
         title: '加载中',
         icon: 'loading'
       })
+
+      if (this.path === 0) {
+        this.records = []
+      }
       // 需要传到后台的数据
       const data = {
-        openid: this.userinfo.openId
+        openid: this.userinfo.openId,
+        path: this.page
       }
       // 将后台传过来的数据保存到records变量中
       const resultRecords = await get('/weapp/showRecords', data)
-      this.records = resultRecords.records
+      // this.records = resultRecords.records
+      this.records = this.records.concat(resultRecords.records)
+      if (resultRecords.records.lenth < 15 && this.page > 0) {
+        this.more = false
+      }
       console.log('从后台返回的记录数据', this.records)
       // 通过records数组长度来判断show_record变量为false或者true
       if (this.records.lenth === 0) {
@@ -63,7 +90,7 @@ export default {
       // 将用户信息储存到data的userinfo字段里面，this.userinfo就是指的这个字段。
       this.userinfo = userinfo
     }
-    this.getRecords()
+    this.getRecords(true)
   },
 
   onShareAppMessage(e) {
@@ -72,6 +99,19 @@ export default {
       path: '/pages/index/main',
       imageUrl: ''
     }
+  },
+  onReachBottom () {
+    // 如果more为false，说明没有更多数据了，不需要再加载getRecords()
+    if (!this.more) {
+      return false
+    }
+    this.page = this.page + 1
+    console.log('this.path: ', this.page)
+    this.getRecords(false)
+  },
+  onPullDownRefresh () {
+    this.getRecords(true)
+    wx.stopPullDownRefresh()
   }
 }
 </script>

@@ -3,13 +3,16 @@
 const {mysql} = require('../qcloud')
 
 module.exports = async(ctx) => {
-    const {openid} = ctx.request.query
+    const {openid, page} = ctx.request.query
 
     try {
         const records = await mysql('records')
                                 .where('openid', openid)
                                 .select('id', 'add', 'mark', 'note', 'create_time')
                                 .orderBy('id', 'desc')
+                                .limit(15).offset(Number(page * 15))
+
+        // limit n offset m是mysql的分页语句  代码从m行开始查，查找n条数据
         // 执行成功返回的数据
         ctx.state.data = {
             records
