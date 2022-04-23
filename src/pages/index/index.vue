@@ -30,7 +30,7 @@ export default {
   components: {
     LoginWindow
   },
-  data() {
+  data () {
     return {
       mark: 0,
       userinfo: {},
@@ -38,7 +38,7 @@ export default {
     }
   },
   methods: {
-    async addMark(add) {
+    async addMark (add) {
       try {
         const data = {
           openid: this.userinfo.openId,
@@ -54,14 +54,14 @@ export default {
         console.log('从后端返回的信息是: ', e)
       }
     },
-    getModel(val) {
+    getModel (val) {
       this.showLogin = val[0]
       this.userinfo = val[1]
       console.log('this.whowLogin', this.showLogin)
       // 在这里加的意思是，每一次登录成功，也会调用查询分数
       this.getMark()
     },
-    async getMark() {
+    async getMark () {
       try {
         // 请求后端，找到server/controllers/getmark.js文件
         const res = await get('/weapp/getmark', {openid: this.userinfo.openId})
@@ -73,7 +73,7 @@ export default {
         console.log('从后端返回的信息是: ', e)
       }
     },
-    async resetMark() {
+    async resetMark () {
       if (this.mark !== 0) {
         try {
           const res = await post('/weapp/resetmark', {openid: this.userinfo.openId})
@@ -85,7 +85,7 @@ export default {
         }
       }
     },
-    async undoResetMark() {
+    async undoResetMark () {
       try {
         const res = await post('/weapp/undoreset', {openid: this.userinfo.openId})
         console.log('从后端返回的执行正确的信息是：', res)
@@ -96,11 +96,11 @@ export default {
         console.log('从后端返回的错误信息是: ', e)
       }
     },
-    reset() {
+    reset () {
       var that = this
       wx.showModal({
         content: '确定要清零吗？',
-        success: function(res) {
+        success: function (res) {
           console.log('执行清堆后是000：', res)
           if (res.confirm) {
             console.log('执行清堆后是：', res)
@@ -110,7 +110,7 @@ export default {
       })
     }
   },
-  mounted() {
+  mounted () {
     const userinfo = wx.getStorageSync('userinfo')
     if (userinfo.openId) {
       this.userinfo = userinfo
@@ -120,15 +120,15 @@ export default {
       this.showLogin = true
     }
   },
-  onShow() {
+  onShow () {
     this.getMark()
   },
-  onPullDownRefresh() {
+  onPullDownRefresh () {
     console.log('我正在下拉刷新')
     this.getMark()
     wx.stopPullDownRefresh()
   },
-  onShareAppMessage() {
+  onShareAppMessage () {
     return {
       title: '贞子',
       path: '/pages/index/main'

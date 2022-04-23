@@ -25,7 +25,7 @@ import qcloud from 'wafer2-client-sdk'
 import {showSuccess} from '@/utils/utils'
 export default {
   methods: {
-    login() {
+    login () {
       qcloud.setLoginUrl(config.loginUrl)
       qcloud.login({
         success: userInfo => {
@@ -40,7 +40,7 @@ export default {
         }
       })
     },
-    loginSuccess(userInfo) {
+    loginSuccess (userInfo) {
       wx.setStorageSync('userinfo', userInfo)
     }
   }

@@ -93,7 +93,7 @@ export default {
     this.getRecords(true)
   },
 
-  onShareAppMessage(e) {
+  onShareAppMessage (e) {
     return {
       title: '真自律',
       path: '/pages/index/main',
